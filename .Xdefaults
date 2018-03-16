@@ -1,0 +1,6 @@
+.Xresources
+
+" Fullscreen switch
+URxvt.perl-ext-common:  fullscreen
+URxvt.keysym.F11:       perl:fullscreen:switch
+

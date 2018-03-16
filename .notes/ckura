@@ -1,0 +1,81 @@
+#!/bin/bash -       
+#description     :
+#author          :Michele Gazzetti
+#date            :09.06.16
+#notes           :
+#==============================================================================
+
+
+telnet localhost 5002
+
+#####
+## Jersey
+####
+# === http://eclipsesource.com/blogs/2014/02/04/step-by-step-how-to-bring-jax-rs-and-osgi-together/
+# === https://isurues.wordpress.com/2009/01/01/useful-equinox-osgi-commands/
+
+#####
+## Docker management
+####
+##
+## https://docs.docker.com/registry/mirror/
+
+#####
+## Kura related
+#####
+# == http://icanseedeadcats.com/2015/03/24/eclipse-iot-challenge-mqtt-communication-for-hot-desks-featuring-kura-mosquitto-and-paho-and-project-wrapup/
+
+####
+## Kura on steroids
+###
+#install file:/home/pi/kura-steroids/javax.net.ssl-1.0.0.jar
+install file:/home/pi/kura-steroids/com.eclipsesource.jaxrs.jersey-all-2.22.2.jar
+install file:/home/pi/kura-steroids/publisher-3.3.jar
+#install file:/home/pi/kura-steroids/org.osgi.example-1.0.0.jar
+install file:/home/pi/kura-steroids/docker-kura-manager-1.0-SNAPSHOT.jar
+start 69 70 71
+
+#####
+### LOG
+####
+tail -f /var/log/kura.log
+
+#####
+### Start Docker in Rpi this way
+#####
+sudo /usr/bin/docker daemon -H unix:///var/run/docker.sock -H tcp://127.0.0.1:2376 --insecure-registry 10.0.0.1:5000 --tlsverify --tlscacert=/opt/eclipse/kura/.docker/certs/ca.pem --tlscert=/opt/eclipse/kura/.docker/certs/server-cert.pem --tlskey=/opt/eclipse/kura/.docker/certs/server-key.pem
+
+
+##### using config.ini
+, reference\:file\:../plugins/javax.servlet-api-3.0.1.jar@5\:start, reference\:file\:../plugins/javax.ws.rs-api-2.0.1.jar@5\:start, reference\:file\:../plugins/jersey-all-2.8.jar@5\:start, reference\:file\:../plugins/publisher-3.3.jar@5\:start
+sudo service kura stop
+sudo service kura start
+
+#### tk1 -java
+sudo add-apt-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java7-installer
+
+#### tk1 ntp for certifates
+sudo service ntp stop
+sudo ntpdate pool.ntp.org
+sudo service ntp start
+
+
+time docker run -d -p 5000:5000 --restart=always --name registry vdavy/registry-arm
+
+#### Error docker  when pull some images
+DEBU[0340] Cleaning up layer f14bf3fa368785fa2efc934f35b2da6449058e847c1f5c2fbd065783b3975a84: Untar re-exec error: exit status 1: output: operation not supported
+DEBU[0340] Error trying v2 registry: failed to register layer: Untar re-exec error: exit status 1: output: operation not supported
+
+
+#### Good repository
+time docker run -d -p 5000:5000 --restart=always --name registry armbuild/registry
+
+#### forwarding command from outside
+((echo "list"; sleep 1) | telnet localhost 5002) 2>&1
+
+### start server on tk1
+cd server/ && env GOOS=linux GOARCH=arm go build -o ../dev/server && cd ..
+scp dev/server ubuntu@10.0.0.115:/home/ubuntu/
+sudo ./server daemon -d aufs

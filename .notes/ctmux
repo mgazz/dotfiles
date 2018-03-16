@@ -1,0 +1,27 @@
+#vim: set ft=conf:
+
+# switch panel
+C-space }
+
+#
+C-space :resize-pane -DULR <panel-number>
+
+#to let window number 3 and window number 1 swap their positions.
+swap-window -s 3 -t 1
+
+#To swap the current window with the top window, do:
+swap-window -t 0
+
+#In the unlikely case of having no window at index 0, do:
+move-window -t 0
+
+#You can bind that command to a key (T for "top" for example) by adding the following to your ~/.tmux.conf:
+bind-key T swap-window -t 0
+
+#create new session within tmux
+new-session -s name
+
+#rename session 
+rename-session -t number name 
+
+

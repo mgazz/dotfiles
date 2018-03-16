@@ -1,0 +1,243 @@
+#!/bin/bash -       
+#description     :
+#author          :Michele Gazzetti
+#date            :09.06.16
+#notes           :
+#==============================================================================
+
+#####
+### Docker useful commands
+#####
+# show all docker containers
+docker ps -a
+# stop all containers
+docker stop `docker ps -a -q`
+# remove all containers
+docker ropt/eclipse/kura/clean_docker.shm `docker ps -a -q`
+docker rm $(docker ps -a -q)
+# remove all images
+docker rmi $(docker images -q)
+# don't know --> check
+docker rmi -f $(docker images -q -a -f dangling=true)
+
+#### raspbian on Docker 64bit --> need qemu
+#
+sudo apt-get install qemu-user-static
+#
+sudo docker search raspbian
+
+#####
+## Docker start local registry listening at port 5000
+#####
+# start registry
+docker run -d -p 5000:5000 --restart=always --name registry registry:2
+
+docker pull ubuntu && docker tag ubuntu localhost:5000/ubuntu
+# push image to registry
+docker push localhost:5000/ubuntu
+
+#####
+## Install pip 
+#####
+sudo apt-get install python-pip python-dev build-essential 
+#
+sudo pip install --upgrade pip
+#
+sudo pip install --upgrade virtualenv 
+
+#####
+### Daemon ports discovery
+####
+#====http://www.professormesser.com/nmap/deciphering-nmaps-port-descriptions/
+# port listening for TCP connections from the network
+sudo nmap -sT -O localhost
+# check if port is associated with the official list of known services
+cat /etc/services | grep 631
+# The presence of the open port in netstat is reassuring because a cracker opening a port surreptitiously on a hacked system would likely not allow it to be revealed through this command
+netstat -anp | grep 631
+# lsof command reveals similar information since it is also capable of linking open ports to services
+lsof -i
+
+#ip on lan
+sudo apt-get install nmap
+nmap -sP 192.168.1.*
+
+
+#####
+### Maven command line 
+#####
+# create project from known archetype
+mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeGroupId=org.springframework.osgi -DarchetypeArtifactId=spring-osgi-bundle-archetype -DinteractiveMode=false
+# interactive mode
+mvn archetype:generate
+#
+mvn package
+#
+mvn install
+
+
+
+#####
+## Mosquitto ubuntu setup
+## http://icanseedeadcats.com/2015/03/24/eclipse-iot-challenge-mqtt-communication-for-hot-desks-featuring-kura-mosquitto-and-paho-and-project-wrapup/
+## https://goochgooch.wordpress.com/2014/08/01/building-mosquitto-1-4/
+#####
+
+sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa -y
+sudo apt-get update
+sudo apt-get install mosquitto mosquitto-clients
+
+cat << EOF | sudo tee -a /etc/mosquitto/conf.d/web.conf
+listener 1883
+listener 9001
+protocol websockets
+password_file mosquitto.pwd
+EOF
+sudo mosquitto_passwd -c mosquitto.pwd user
+mosquitto -c /etc/mosquitto/mosquitto.conf
+
+#### test mosquitto  --> 3 different shells
+mosquitto
+mosquitto_sub -v -t 'test/topic'
+mosquitto_pub -t 'test/topic' -m 'helloWorld'
+
+#####
+## Iptables
+####
+#=== https://help.ubuntu.com/community/IptablesHowTo
+
+#####
+## Bash Misc
+#####
+# Learn tree better because it's really cool
+tree -d
+# will install upgrades for already installed packages only and ignore requests to install new packages
+apt-get install --only-upgrade <pkgname>
+
+#
+#linux permissions owner|group|others and r=4 w=2 x=4 --> meaning 764 = owner:rwx group:rw  other:r
+# usually dir:755
+
+#####
+## Enable ssh connection without psw
+####
+#
+##### for this example I used a rpi
+#
+# on local computer (the one you from you start ssh)
+ssh-keygen 
+# from local computer and ssh remote server that I want to access without psw username@remote_host 
+USR="pi"
+HOST="10.0.0.100"
+cat ~/.ssh/id_rsa.pub | ssh "$USR"@"$HOST" "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+####
+#related
+# remove old host key
+ssh-keygen -f "/home/michele/.ssh/known_hosts" -R 172.17.0.2
+# copy private key over ssh
+cat ~/.ssh/id_rsa | ssh root@172.17.0.2 "mkdir -p ~/.ssh && cat >> ~/.ssh/id_rsa"
+#
+ssh root@172.17.0.2 "chmod 400 ~/.ssh/id_rsa"
+
+#Everytime a user logs into a host via SSH that hosts unique host key is stored in the users ~/.ssh/known_hosts file. If a host is not already added into this file than the first occurrence of an SSH connection will display the above message, prompting the user to either enter yes or no. By entering Yes, the servers unique host key is automatically stored into the known_hosts file, this has been implemented to prevent man in the middle attacks.
+#for user
+# vi ~/.ssh/config
+# system wide
+# vi /etc/ssh/ssh_config
+#set
+#StrictHostKeyChecking no
+###REMEMBER: sudo apt-get install openssh-server
+
+
+#####
+## AWK and SED
+#####
+# search and print column
+awk '$2 == "LINUX" { print $0 }' test.txt
+#get line after the one searched
+awk '/blah/{getline; print}' logfile
+# second column, first row of command output
+ps aux | grep dockerd | awk 'NR==1 {print $2}'
+kill -15 $(ps aux | grep dockerd | awk 'NR==1 {print $2}')
+# make backup, match pattern and delete
+sed -i.bak '/^HERE IT IS/d' <file>
+# insert line after first march
+sed '/CLIENTSCRIPT="foo"/a CLIENTSCRIPT2="hello"' file
+# sobstitute in place of search
+sed -i '/CLIENTSCRIPT="foo"/a CLIENTSCRIPT2="hello"' file
+# search and replace
+sed -i.bak s/STRING_TO_REPLACE/STRING_TO_REPLACE_IT/g index.html
+# search pattern in line and replace entire line and make backup
+sed -i.bak '/^PATTERN/c\NEWLINE' file
+#Search for a line that starts "with start_line", and replace the whole line with a new one:
+sed -i 's/^start_line.*$/new_line/' file
+
+#####
+## Ansible setup (retest on vm)
+####
+#ansible setup https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-ansible-on-ubuntu-14-04
+#ansible tutorial: https://serversforhackers.com/an-ansible-tutorial
+#
+sudo apt-get update
+#
+sudo apt-get install software-properties-common
+#
+sudo apt-add-repository ppa:ansible/ansible
+#
+sudo apt-get install ansible
+
+sudo cp /etc/ansible/hosts /etc/ansible/hosts.orig
+
+###### ansible setup
+# 
+ssh-agent bash
+ssh-add ~/.ssh/id_rsa
+#
+ansible all -m ping -u pi
+#
+ansible all -m ping -u pi --sudo
+#
+ansible all -a "/bin/echo hello" -u pi
+
+#####
+## Git
+####
+#### remove unstaged changes
+#
+git stash save --keep-index
+#
+git stash drop
+# push all local branches 
+git push --all -u
+
+
+####Docker start and save image
+#run image --> creates container
+sudo docker run -i -t ubuntu /bin/bash
+#check running containers
+docker ps -a
+#save current container as new image
+docker commit $CONTAINER_ID newimage
+#run and check that everything is working
+sudo docker run -i -t newimage /bin/bash
+#save image locally and move it 
+docker save newimage > /tmp/newimage.tar
+#move it where you want and load it again
+docker load < /tmp/mynewimage.tar
+
+
+### docker development pull and restart
+git pull && kill -15 $(ps aux | grep dockerd | awk 'NR==1 {print $2}') && hack/make.sh binary && cp bundles/1.13.0-dev/binary-client/docker* /usr/bin/ && cp  bundles/1.13.0-dev/binary-daemon/docker* /usr/bin/ && docker daemon -D&
+
+
+####
+## eclim headless
+####
+sudo usermod -a -G users ubuntu
+logout and login
+wget https://github.com/ervandew/eclim/releases/download/2.6.0/eclim_2.6.0.jar
+java -Dvim.files=$HOME/.vim -Declipse.home=$ECLIPSE_HOME -jar eclim_2.6.0.jar install
+sudo apt-get install xvfb
+
+Xvfb :1 -screen 0 1024x768x24 &
+/home/ubuntu/sw/eclipse/eclimd --background

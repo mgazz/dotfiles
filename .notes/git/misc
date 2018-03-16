@@ -1,0 +1,3 @@
+# list all files in directory
+lt ls-tree --full-tree -r HEAD
+

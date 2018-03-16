@@ -1,0 +1,186 @@
+##script name for logging
+#SCRIPT_NAME=\`basename "\$0"\`
+#snippet header "Header for bash files"
+##!/bin/bash -       
+##description     :$1
+##author          :Michele Gazzetti
+##date            :`date +%d.%m.%y`
+##notes           :
+##==============================================================================
+
+#### Variables
+
+#### Script start
+#$0
+#endsnippet
+snippet ifbool "if var bool = true" b
+if [ "\$$1" = true  ]; then
+	$0
+fi
+endsnippet
+
+snippet fappend "append to a file using tee" b
+cat << EOF | sudo tee -a ${1:file-path}
+$0
+EOF
+
+endsnippet
+
+snippet notusr "notify user" b
+notify-send "${1:$SCRIPT_NAME}" "${2:$END_MESSAGE}" 
+$0
+endsnippet
+
+snippet ifexist "file exist" b
+if [[ ! -f "" ]]; then
+	$0
+fi
+endsnippet
+snippet sucommand "sudo command" b
+su -c '$1'
+$0
+endsnippet
+snippet add-key "add key" b
+wget -qO - $1 | sudo apt-key add -
+$0
+endsnippet
+snippet wgetindir "-O is file name, -P is the directory" b
+wget ${1:url} -O ${2:filename} -P ${3:directory}
+endsnippet
+snippet ifrepo "if repository not present" b
+repo=''
+if ! grep -q "$repo" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+    apt-add-repository "$repo"
+fi
+endsnippet
+
+snippet wgetfile "download file and save filename in var" b
+file_url="${1:insert url}"
+file_name="$(basename "$file_url")"
+file_dir="${2:insert dir}"
+#if file not present --> download
+if [[ ! -f "$file_dir"/"file_name" ]]; then
+	wget "$file_url" -P "$file_name"
+fi
+
+endsnippet
+
+snippet ifnotpkg "if not package installed --> install" b
+if [[ ! $(hash ${1:program} 2>/dev/null) == "" ]]; then
+	apt-get install -y ${2:program}
+else
+	echo "$2 is already installed"
+fi
+$0
+endsnippet
+
+snippet awcol "awk return column" b
+#http://www.shellhacks.com/en/Printing-Specific-Columns-Fields-in-Bash-using-AWK
+
+awk  -F "${1:separator}"'{print ${2:column $0, $m $n, }' file
+
+endsnippet
+
+
+
+#snippet template_service "Description" b
+##!/bin/sh
+#### BEGIN INIT INFO
+## Provides:
+## Required-Start:    $remote_fs $syslog
+## Required-Stop:     $remote_fs $syslog
+## Default-Start:     2 3 4 5
+## Default-Stop:      0 1 6
+## Short-Description: Start daemon at boot time
+## Description:       Enable service provided by daemon.
+#### END INIT INFO
+
+#dir="/usr/bin"
+#cmd=""
+#user=""
+
+#name=$1
+#pid_file="/var/run/$1.pid"
+#stdout_log="/var/log/$1.log"
+#stderr_log="/var/log/$1.err"
+
+#get_pid() {
+	#cat "$pid_file"
+#}
+
+#is_running() {
+	#[ -f "$pid_file" ] && ps \`get_pid\` > /dev/null 2>&1
+#}
+
+#case "\$1" in
+	#start)
+	#if is_running; then
+		#echo "Already started"
+	#else
+		#echo "Starting $1"
+		#cd "$dir"
+		#if [ -z "$user" ]; then
+			#sudo $dir/$cmd >> "$stdout_log" 2>> "$stderr_log" &
+		#else
+			#sudo -u "$user" $dir/$cmd >> "$stdout_log" 2>> "$stderr_log" &
+		#fi
+		#echo $! > "$pid_file"
+		#if ! is_running; then
+			#echo "Unable to start, see $stdout_log and $stderr_log"
+			#exit 1
+		#fi
+	#fi
+	#;;
+	#stop)
+	#if is_running; then
+		#echo -n "Stopping $1.."
+		#kill \`get_pid\`
+		#for i in {1..10}
+		#do
+			#if ! is_running; then
+				#break
+			#fi
+
+			#echo -n "."
+			#sleep 1
+		#done
+		#echo
+
+		#if is_running; then
+			#echo "Not stopped; may still be shutting down or shutdown may have failed"
+			#exit 1
+		#else
+			#echo "Stopped"
+			#if [ -f "$pid_file" ]; then
+				#rm "$pid_file"
+			#fi
+		#fi
+	#else
+		#echo "Not running"
+	#fi
+	#;;
+	#restart)
+	#\$0 stop
+	#if is_running; then
+		#echo "Unable to stop, will not attempt to start"
+		#exit 1
+	#fi
+	#\$0 start
+	#;;
+	#status)
+	#if is_running; then
+		#echo "Running"
+	#else
+	#echo "Stopped"
+		#exit 1
+	#fi
+	#;;
+	#*)
+	#echo "Usage: \$0 {start|stop|restart|status}"
+	#exit 1
+	#;;
+#esac
+
+#exit 0
+
+#endsnippet

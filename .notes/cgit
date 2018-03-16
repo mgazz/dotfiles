@@ -1,0 +1,72 @@
+#vim: set ft=sh:
+
+# #####
+# ### Branch management
+# #####
+# 
+#delete branch
+git branch -d <branch-name> 
+
+# rename branch
+git branch -m new-name
+
+#####################################################################
+
+# #####
+# ### Undo
+# #####
+# 
+# undo all add
+git reset --soft HEAD~1
+
+#undo file modifications
+git checkout -- <file>
+
+# error in commit
+git reset #to upstage any changes you've made since
+git commit --amend
+
+
+# keep file in repo but always assume unchanged
+git update-index --assume-unchanged <file>
+git update-index --no-assume-unchanged <file>
+
+
+# untrack file
+git rm --cached <file> 
+
+# check differences between branches
+git diff branch1..branch2
+
+git diff
+
+# best way of merging to master
+git checkout master
+git pull origin master
+git merge test
+git push origin master
+
+
+#lists all of the already committed files being tracked by your git repo
+git ls-tree --full-tree -r HEAD
+
+# check remote git url
+git config --get remote.origin.url
+
+# go back 1 commit
+git reset --hard HEAD~1
+
+# undo merge return 
+
+# merge issue rebasing and squashing
+# checkout feature and allign to master
+git checkout issue-x
+git rebase master
+
+git checkout master # squash and merge to master
+git merge --squash issue-x
+git commit
+
+
+
+

@@ -1,0 +1,23 @@
+.vim/bundle/
+.vim/eclim
+.vim/eclim/*
+.vim/plugged/*
+.vim/plugin/eclim.vim
+*.swp
+.vim/.netrwhist
+.tmux/
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+*.un~
+Session.vim
+.netrwhist
+*~
+
+#install last version
+bin/docker-compose
+
+

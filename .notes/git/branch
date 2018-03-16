@@ -1,0 +1,9 @@
+#vim: set ft=sh:
+
+#create new branch
+git checkout -b $BNAME
+#check current branch
+git branch
+#
+
+
