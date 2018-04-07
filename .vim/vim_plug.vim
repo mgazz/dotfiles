@@ -38,6 +38,7 @@ Plug 'tell-k/vim-autopep8'
 " for includes
 "Plug 'Shougo/neoinclude.vim'
 Plug 'Valloric/YouCompleteMe', {'do' :'cd ~/.vim/plugged/YouCompleteMe/ && ./install.py --clang-completer'}
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable'}
 "
 "Plug 'dbgx/lldb.nvim', { 'do': ':UpdateRemotePlugins' } 
 Plug 'vim-scripts/Conque-GDB'

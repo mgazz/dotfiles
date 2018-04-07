@@ -1,3 +1,16 @@
+"
+"####
+"## YouCompleteMe clang configuration
+"####
+"
+cd ~/.vim/plugged/YouCompleteMe/
+./install.sh --clang-completer
+" in .vimrc
+let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+" set YouCompleteMe configuration for your project
+~/.vim/plugged/YCM-Generator/config_gen.py .
+
+
 "open directory current file
 ":e %:h
 

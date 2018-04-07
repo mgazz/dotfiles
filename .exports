@@ -78,6 +78,7 @@ add_var_to_lib(){
             echo_color "... path ${LIB_PATH} already in  ${2}" 3
         fi
         # add to CMAKE_PREFIX_PATH 
+        # echo ${CMAKE_PREFIX_PATH}
         if [[ $(echo "${CMAKE_PREFIX_PATH}" | grep "${!1}") == "" ]]; then
             echo_color "... adding lib path ${1} to CMAKE_PREFIX_PATH" 2
             export CMAKE_PREFIX_PATH=${!1}${CMAKE_PREFIX_PATH:+:${CMAKE_PREFIX_PATH}}
@@ -88,23 +89,23 @@ add_var_to_lib(){
 export JAVA_WORKSPACE=/home/$USER/workspace/java
 echo_color "... setting JAVA_WORKSPACE as $JAVA_WORKSPACE" 2
 
-BLAS=/opt/OpenBLAS
-add_var_to_lib BLAS LD_LIBRARY_PATH
+BLAS_HOME=/opt/OpenBLAS
+add_var_to_lib BLAS_HOME LD_LIBRARY_PATH
 
-GTEST=/opt/gtest/usr/local
-add_var_to_lib GTEST LD_LIBRARY_PATH
+GTEST_HOME=/opt/gtest
+add_var_to_lib GTEST_HOME LD_LIBRARY_PATH
 
-OpenCV=/opt/opencv/usr/local
-add_var_to_lib OpenCV LD_LIBRARY_PATH
+OpenCV_HOME=/opt/opencv
+add_var_to_lib OpenCV_HOME LD_LIBRARY_PATH
 
-Caffe=/opt/caffe
-add_var_to_lib Caffe LD_LIBRARY_PATH
+Caffe_HOME=/opt/caffe
+add_var_to_lib Caffe_HOME LD_LIBRARY_PATH
 
-CUDA=/usr/local/cuda
-add_var_to_lib CUDA LD_LIBRARY_PATH
+CUDA_HOME=/usr/local/cuda
+add_var_to_lib CUDA_HOME LD_LIBRARY_PATH
 
-CUPTI=/usr/local/cuda/extras/CUPTI
-add_var_to_lib CUPTI LD_LIBRARY_PATH
+CUPTI_HOME=/usr/local/cuda/extras/CUPTI
+add_var_to_lib CUPTI_HOME LD_LIBRARY_PATH
 
 CUDA_BIN=/usr/local/cuda/bin
 add_var_to_path CUDA_BIN PATH
