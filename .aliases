@@ -13,6 +13,7 @@
 #}
 
 #alias nosetests='/home/$USER/.virtualenvs/$(get_virtualenv_name)/bin/nosetests'
+alias gen-ycm-conf="~/.vim/plugged/YCM-Generator/config_gen.py ."
 pingme(){
     notify-send 'Done !!!'
 }

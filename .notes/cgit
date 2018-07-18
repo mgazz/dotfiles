@@ -10,6 +10,9 @@ git branch -d <branch-name>
 # rename branch
 git branch -m new-name
 
+# when master is ahead of origin and you need so sync master to remote
+git checkout -B master origin/master
+
 #####################################################################
 
 # #####
@@ -68,5 +71,19 @@ git merge --squash issue-x
 git commit
 
 
+### Rebase in case of conflicts
+git rebase -s <strategy> -X <strategy-option> $branch
+- strategy: recursive (default)
+- strategy-option: 
+    * theirs: favorite current branch
+    * ours: favorit branch that you are trying to rebase from
 
+Example:
+    git rebase -X ours master <- rebase and favourite master in case of conflicts
+
+### How to squash
+#from feature branch
+git rebase -i origin/master
+# keep first commit (on top) unchanged (leave pick)
+# change other from pick to squash
 

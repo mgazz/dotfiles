@@ -1,0 +1,44 @@
+snippet ifsmth "Error handling" b
+if not ${1:value} is ${2:None}:
+	${0:do}
+else
+	raise Exception("${3:value is None}")
+endsnippet
+
+snippet ifinline "inline if" b
+${2:dest} = ${3:value} if ${1:condition} else ${4:elsevalue}
+endsnippet
+
+snippet prt "print line" b
+print('${1:message}'.format(${2:value}))
+endsnippet
+
+	
+snippet buildict "smart way of creating dictionary" b
+
+# dictionary for each $3 assign the result of $2($3)
+${1:dest} = {$3: ${2:func}(${3:input}) \
+				for $3 in ${4:list}}
+endsnippet
+
+snippet dpcopy "clone object" b
+${1:dest}= copy.deepcopy(${2:input})
+endsnippet
+
+snippet tictoc "take time" b
+tic = time.time()
+toc = time.time()
+print('DONE (t={:0.2f}s).'.format(toc-tic))
+endsnippet
+
+snippet ordernp "order using numpy argsort" b
+# get ordered indexes
+idxs = np.argsort([-$2${3:entry_value} for ${2:entry} in ${1:values}], kind='mergesort')
+# move to a sorted list
+$1_sorted = $1[idxs]
+endsnippet
+
+snippet flat_list "from list of lists to list" b
+${1:values}=${2:dict}.values()
+$2_flat = [item for sublist in $1 for item in sublist]
+endsnippet
