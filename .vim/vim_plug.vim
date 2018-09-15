@@ -49,6 +49,9 @@ Plug 'scrooloose/nerdcommenter'
 "cool bar
 Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'mgazz/retro-theme-airline'
+Plug 'tpope/vim-fugitive'
+Plug 'oblitum/rainbow'
 "
 "--------------------------------------------------------------------
 "Plug 'tpope/vim-fireplace', { 'for': 'clojure' }

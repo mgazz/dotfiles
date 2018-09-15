@@ -23,6 +23,14 @@ command! -nargs=+ Cppman silent! call system("tmux split-window cppman " . expan
 autocmd FileType cpp,h,hpp nnoremap <silent><buffer> K <Esc>:Cppman <cword><CR>
 
 "======================================
+"
+"
+"PL_Rainbow
+"
+"
+let g:rainbow_active = 1
+
+"======================================
 
 
 "
@@ -30,14 +38,14 @@ autocmd FileType cpp,h,hpp nnoremap <silent><buffer> K <Esc>:Cppman <cword><CR>
 "
 " Enable the list of buffers
 let g:airline#extensions#tabline#enabled = 0
-" Show just the filename
+"" Show just the filename
 let g:airline#extensions#tabline#fnamemod = ':t'
-let g:airline_theme='kalisi'
+let g:airline_theme='retro'
 
 if !exists('g:airline_symbols')
-let g:airline_symbols = {}
+    let g:airline_symbols = {}
 endif
-" unicode symbols
+"" unicode symbols
 let g:airline_left_sep = '»'
 let g:airline_left_sep = ''
 let g:airline_right_sep = '«'

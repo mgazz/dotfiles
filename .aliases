@@ -31,14 +31,13 @@ sv(){
     history -d $((HISTCMD-1)) && fc -nl $((HISTCMD - 1)) | sed '1s/^[[:space:]]*//\' >> ~/.commands.sh 
 }
 
-testgit(){
-    git add --all
-    git commit -m "test"
-    git push
-}
-
 alias nautilus='nautilus --no-desktop'
+
+####
+## Git relate aliases
+####
 alias g='git'
+alias gp='git push'
 
 #Remove the files named a.out frequently.
 alias rmao="find . -iname a.out -exec rm {} \;"
@@ -64,6 +63,7 @@ alias ocv='vim ~/.notes/cvim.vim'
 alias ocg='vim ~/.notes/cgit'
 alias ock='vim ~/.notes/ckura'
 alias oct='vim ~/.notes/ctmux'
+alias urxvt='urxvt -name =)'
 alias op='vim ~/.profile'
 alias oa='vim ~/.aliases'
 alias om='vim ~/.manual.sh'
