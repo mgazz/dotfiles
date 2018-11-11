@@ -21,6 +21,7 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 " yo copy paste
 Plug 'tpope/vim-unimpaired' 
 "Plug 'jeaye/color_coded' not supported yet
+
 Plug 'rking/ag.vim'
 "open file in dir, check buffer...
 Plug 'kien/ctrlp.vim'
@@ -52,6 +53,16 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'mgazz/retro-theme-airline'
 Plug 'tpope/vim-fugitive'
 Plug 'oblitum/rainbow'
+Plug 'szymonmaszke/vimpyter' "vim-plug
+
+"" Formatting
+Plug 'google/vim-maktaba'
+Plug 'google/vim-codefmt'
+Plug 'google/vim-glaive'
+
+"" Highlightning
+Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'vim-scripts/DoxygenToolkit.vim'
 "
 "--------------------------------------------------------------------
 "Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
