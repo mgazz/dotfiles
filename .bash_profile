@@ -15,3 +15,4 @@ for file in ~/.{bash_prompt,aliases,dockerfunc,extra,exports,bashrc}; do
 done
 unset file
 
+export GPG_TTY=$(tty)
